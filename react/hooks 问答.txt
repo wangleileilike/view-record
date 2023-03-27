@@ -1,0 +1,67 @@
+1.在无状态组件每一次函数上下文执行的时候，react用什么方式记录了hooks的状态？
+	使用hooks链表存储，memoizedState在一次调和渲染过程中，以链表的形式存放hooks信息
+源码角度：mountWorkInProgressHook这个函数做的事情很简单，首先每次执行一个hooks函数，都产生一个hook对象，里面保存了当前hook信息,然后将每个hooks以链表形式串联起来，并赋值给workInProgress的memoizedState。也就证实了上述所说的，函数组件用memoizedState存放hooks链表。
+
+
+
+	
+2 多个react-hooks用什么来记录每一个hooks的顺序的 ？ 换个问法！为什么不能条件语句中，声明hooks? hooks声明为什么在组件的最顶部？
+     因为一旦在条件语句中声明hooks，在下一次函数组件更新，hooks链表结构，将会被破坏，current树的memoizedState缓存hooks信息，和当前workInProgress不一致，如果涉及到读取state等操作，就会发生异常。（即初次渲染完成之后的fiber树上的hooks链表顺序和即将更新的fiber树上的hooks链表顺序无法一一对照，读取state时便会发生错误）
+
+
+
+
+3 function函数组件中的useState，和 class类组件 setState有什么区别？
+	相同点：useState和setState调用都会产生一个update对象，里面会记录此次更新的信息，然后将该对象放入待更新的队列中等待更新
+	不同点: 当两次传入的值相同的时候，传入useState的值会和上一次执行完更新之后最新的state进行浅比较，如果相等，则不会继续更新;但是setState则不会，所以组件会重新更新渲染
+
+
+
+
+4 react 是怎么捕获到hooks的执行上下文，是在函数组件内部的？
+
+   react-hooks就是通过函数第一次渲染组件和更新组件分别调用不同的hooks对象，判断在hooks执行是否在函数组件内部，捕获并抛出异常的
+
+
+
+
+5 useEffect,useMemo 中，为什么useRef不需要依赖注入，就能访问到最新的改变值？
+  因为在updateRef函数中，useRef返回的是执行hook产生的hooks对象的memoizedState属性，它是一个对象，保存的始终是函数执行过程中最新的值
+
+
+
+
+6 useMemo是怎么对值做缓存的？如何应用它优化性能？
+
+	在react源码中可以看到,useMemo会创建一个hook对象，执行传入的第一个参数，得到要缓存的值，然后将值和第二个参数deps(依赖数组)，赋值给hook的memoizedState缓存
+
+
+
+7 为什么两次传入useState的值相同，函数组件不更新?
+	传入useState的值会和上一次执行完更新之后最新的state进行浅比较，如果相等，则不会继续更新
+
+
+8 如何确定react中fiber对象（节点）更新的优先级？
+   workInProgress对象的expirationTime属性  react用不同的expirationTime,来确定更新的优先级
+	
+	
+
+8.hooks通过什么证明在函数中的唯一性？
+   通过在hooks链表顺序
+
+
+
+
+
+
+
+
+
+有两个memoizedState大家千万别混淆了，我这里再友情提示一遍
+
+
+workInProgress / current 树上的 memoizedState 保存的是当前函数组件每个hooks形成的链表。
+
+
+每个hooks上的memoizedState 保存了当前hooks信息，不同种类的hooks的memoizedState内容不同
+
