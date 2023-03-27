@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 id="wang">nginx反向代理</h1>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:3000/dhhshs/ssss');
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    console.log(xhr)
+                }
+            }
+        }
+
+        /*--------------------单例模式-----------------------------*/
+
+        class LoginFrame {
+            static instance = 666
+            constructor(state){
+                this.state = state
+                this.sb = 'test'
+            }
+            show(){
+                if(this.state === 'show'){
+                    console.log('登录框已显示')
+                    return
+                }
+                this.state = 'show'
+                console.log('登录框展示成功')
+            }
+            hide(){
+                if(this.state === 'hide'){
+                    console.log('登录框已隐藏')
+                    return
+                }
+                this.state = 'hide'
+                console.log('登录框隐藏成功')
+            }
+            // 通过静态方法获取静态属性instance上是否存在实例，如果没有创建一个并返回，反之直接返回已有的实例
+            static getInstance(state){
+                console.log('instance--->', this, this.instance)
+                if(!this.instance){
+                    this.instance = new LoginFrame(state)
+                }
+                return this.instance
+            }
+        }
+        const p1 = LoginFrame.getInstance('show')
+        const p2 = LoginFrame.getInstance('hide')
+        const p3 = new LoginFrame('show') === new LoginFrame('hide')
+        // console.log(LoginFrame) // true
+
+
+        /*----------------------观察者模式---------------------------*/
+        // 要求：医院预约系统 当患者订阅了某一个科室 当某一个科室发布消息的时候 通知患者
+
+        // 目标对象(医院)
+        class Subject {
+            constructor() {
+                this.observerList = {}; // 医院的信息库（即观察者的集合），用来存储患者的信息 { xxx(科室名): [{ yyy(患者信息1) }, { yyy(患者信息1) }] }
+                this.type = ''; // 需要发布的科室
+            }
+
+            // 将患者添加进医院信息库
+            add(info) {
+                const  { type } = info || {};
+                if (!this.observerList[type]) {
+                    this.observerList[type] = [];
+                }
+                // 避免重复添加患者信息
+                if(this.observerList[type].find(item => item.name === info.name)) {
+                    return;
+                }
+                this.observerList[type].push(info);
+            }
+
+            // 取消订阅
+            remove(info) {
+                const { type } = info;
+                if (!this.observerList[type].find(item => item.name === info.name)) {
+                    console.log('抱歉，暂未收到您的订阅信息!')
+                    return;
+                }
+                const index = this.observerList[type].findIndex(item => item.name === info.name);
+                this.observerList[type].splice(index, 1);
+            }
+
+            // 发布信息
+            notify(type) {
+                this.type = type;
+                this.observerList[this.type].forEach(item => {
+                    item.update();
+                });
+            }
+        }
+
+        // 观察者（患者）
+        class Observer {
+            // 构造函数中记录患者的姓名 预约科室 预约时间
+            constructor(name, type, time) {
+                    this.name = name; // 患者姓名
+                    this.type = type; // 挂号科室
+                    this.time = time; // 挂号时间
+            }
+
+            // 自己定义收到订阅消息后的方法（例如患者受到消息之后是否选择就诊还是放弃等）
+            update() {
+                console.log(`尊敬的${this.name}：您预约的${this.type}诊治将要在${this.time}开始了！`);
+            }
+        }
+
+        const subject = new Subject();
+
+        const observer1 = new Observer('李成', '口腔科', '2023-2-23');
+        const observer2 = new Observer('傅建良', '肛肠科', '2023-2-22');
+        const observer3 = new Observer('杨苏文', '妇产科', '2023-1-20');
+        const observer4 = new Observer('杨苏文', '妇产科', '2023-1-20');
+
+        subject.add(observer1);
+        subject.add(observer2);
+        subject.add(observer3);
+        subject.add(observer4);
+
+        subject.remove(observer2);
+
+        subject.notify('口腔科');
+        subject.notify('肛肠科');
+        subject.notify('妇产科');
+
+
+
+        /*----------------------发布订阅模式---------------------------*/
+        // 要求：医院预约系统 当患者通过一款APP订阅了某一个科室 当某一个科室发布的消息的时候 APP通知患者
+
+        // 相当于这款APP
+        class EventEmit { 
+            constructor() {
+                this.events = {}; // 事件中心 格式: { 科室1: [ ], 科室2": [], 科室3: [] }
+            }
+
+            // 添加事件的方法
+            // type为订阅类型 callback为发布消息之后执行的回调函数
+            on(type, callback) {
+                if (!this.events[type]) {
+                    this.events[type] = [];  
+                }
+                this.events[type].push(callback);
+            }
+
+
+            emit(type, ...args) {
+                if (this.events[type]) {
+                    this.events[type].forEach(callback => callback(...args));
+                }
+            }
+
+            remove(type, callback) {
+                if (!this.events[type]) {
+                    console.log(`没有订阅该事件: ${type}`)
+                    return;
+                }
+                delete this.events[type];
+                callback();
+            }
+
+            removeAll(callback) {
+                this.events = [];
+                callback();
+            }
+        }
+
+        const eventEmit = new EventEmit();
+        eventEmit.on('肛肠科', info => {
+            console.log('这是肛肠科的消息1', info)
+        });
+        eventEmit.on('肛肠科', info => {
+            console.log('这是肛肠科的消息2', info)
+        });
+        eventEmit.on('口腔科', info => {
+            console.log('这是口腔科的消息', info)
+        });
+        eventEmit.on('口腔科2', info => {
+            console.log('这是口腔科的消息2', info)
+        });
+
+        eventEmit.removeAll(() => {
+            console.log('删除全部订阅消息成功！')
+        });
+
+        eventEmit.remove('口腔科2', () => {
+            console.log('删除口腔科2的订阅消息成功！')
+        });
+
+        eventEmit.remove('妇产科', () => {
+            console.log('删除妇产科的订阅消息成功！')
+        });
+
+        
+
+        eventEmit.emit('肛肠科', '李成');
+        eventEmit.emit('口腔科', '王明细');
+        eventEmit.emit('口腔科2', '多尔衮');
+
+    let count = 0;
+
+// 防抖
+function debounce(fn, delay = 3000) {
+    let timer = null;
+    return function() {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn.apply(_this, arguments);
+            timer = null;
+        }, delay)
+    }
+}
+
+
+document.getElementById('wang').addEventListener("click", debounce(() => {
+    console.log('test')
+}))
+
+
+// 节流
+function throttle(fn, delay = 3000) {
+    let timer;
+    return function() {
+        if (timer) {
+            return;
+        }
+    
+        timer = setTimeout(() => {
+            fn.apply(this, arguments);
+            timer = null;
+        }, delay)
+    }
+}
+
+    </script>
+</body>
+</html>

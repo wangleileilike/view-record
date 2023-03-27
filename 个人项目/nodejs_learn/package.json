@@ -1,0 +1,22 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "learn nojs",
+  "main": "args.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint **/*.js",
+    "start": "set NODE_ENV=development && node server.js --p 5000 --user wangleilei"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^10.0.0",
+    "express": "^4.18.2",
+    "fetch": "^1.1.0",
+    "ora": "^4.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0"
+  }
+}
