@@ -1,0 +1,11 @@
+1.如何确定fiber结构中任务的优先级，请举例说明
+React的Fiber结构中，每个任务都有一个对应的优先级，可以通过这个优先级来决定执行顺序。React定义了五个不同的优先级，分别是：
+
+Immediate Priority：立即执行的高优先级任务，例如用户操作或动画。
+User Blocking Priority：用户阻塞优先级任务，例如列表加载或输入框响应。
+Normal Priority：默认优先级任务，例如大部分渲染更新。
+Low Priority：低优先级任务，例如微小更新和延迟加载。
+Idle Priority：空闲时执行的任务，例如预加载和数据缓存。
+在Fiber结构中，每个任务（也就是Fiber节点）都有一个priority属性，用于表示该任务的优先级。React使用一种叫做“时间切片”的技术来决定每个任务的优先级，即将渲染任务拆分成多个片段，每个片段都有一个截止时间（deadline），超过这个截止时间后，任务会被放弃执行。
+
+举个例子，假设我们需要在React应用中进行一次重渲染，这个重渲染包含三个组件的更新，分别是Header、Content和Footer。React会将这三个组件的更新任务添加到Fiber树上，每个任务都有一个priority属性，用于表示其优先级。假设Header组件的更新任务属于Immediate Priority级别，Content组件的更新任务属于Normal Priority级别，Footer组件的更新任务属于Low Priority级别。那么React会根据这些priority属性来决定任务的执行顺序，即先执行Immediate Priority级别的任务，再执行Normal Priority级别的任务，最后执行Low Priority级别的任务。同时，React还会进行时间切片，并根据截止时间来决定是否放弃执行某个任务，以保证整个渲染过程的流畅性。

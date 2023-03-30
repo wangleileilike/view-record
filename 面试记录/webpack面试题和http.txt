@@ -43,6 +43,19 @@ WebpackÈÈ¸üÐÂÊÇÒ»ÖÖ¿ª·¢Ê±ÓÅ»¯ÌåÑéµÄ¼¼Êõ£¬ÄÜ¹»ÔÚ´úÂëÐÞ¸Äºó×Ô¶¯Ë¢ÐÂä¯ÀÀÆ÷Ò³Ãæ£¬Ìá¸
 HMR API»á½«ÐÂ´úÂëÓë¾É´úÂë½øÐÐ±È½Ï£¬È»ºó¾ö¶¨ÄÄÐ©Ä£¿éÐèÒª¸üÐÂ¡£Èç¹ûÄ³¸öÄ£¿é±»±ê¼ÇÎªÈÈ¸üÐÂ£¬Ôò¿ÉÒÔÔÚ²»ÖØÐÂ¼ÓÔØÕû¸öÒ³ÃæµÄÇé¿öÏÂ¸üÐÂ¸ÃÄ£¿é¡£·ñÔò£¬Ò³Ãæ½«ÒÔ³£¹æ·½Ê½ÖØÐÂ¼ÓÔØ¡£
 
 ×ÜÖ®£¬WebpackÈÈ¸üÐÂÀûÓÃÁËWebSocketsºÍHMR APIÀ´Ìá¹©ÊµÊ±¸üÐÂºÍÔöÁ¿¹¹½¨¹¦ÄÜ£¬´Ó¶ø¼Ó¿ì¿ª·¢ËÙ¶ÈºÍÖÊÁ¿¡£
+WebpackÈÈ¸üÐÂ£¨Hot Module Replacement£¬HMR£©Ê¹ÓÃÒÔÏÂHMR API£º
+
+module.hot.accept()£º½ÓÊÜÐÂµÄÄ£¿é£¬²¢Í¨¹ý»Øµ÷º¯ÊýÖ´ÐÐ¸üÐÂ¡£µ±Ò»¸öÄ£¿é±»¸üÐÂÊ±£¬Webpack»á·¢ËÍÒ»ÌõÍ¨Öª¸ø¿Í»§¶Ë£¬Ö¸Ê¾ËüÐèÒª¸üÐÂ¸ÃÄ£¿é¡£
+
+module.hot.decline()£º¾Ü¾øÐÂµÄÄ£¿é¡£Õâ¿ÉÒÔÓÃÀ´×èÖ¹Ò»¸öÈÈ¸üÐÂµÄÄ£¿é±»Ó¦ÓÃ³ÌÐò¼ÓÔØ»òÕßÇÐ»»»Ø¾É°æ±¾¡£
+
+module.hot.dispose()£ºÔÚÈÈ¸üÐÂÖ®Ç°ÇåÀí¾ÉµÄÄ£¿é×´Ì¬¡£Õâ¸öº¯Êý¿ÉÒÔÓÃÀ´ÊÖ¶¯ÊÍ·Å×ÊÔ´¡¢È¡Ïû¶©ÔÄÊÂ¼þ»òÕß³·Ïú¹ÒÆðµÄÇëÇóµÈ¡£
+
+module.hot.status()£º»ñÈ¡µ±Ç°ÈÈ¸üÐÂµÄ×´Ì¬¡£¿ÉÒÔÓÃÀ´¼ì²éµ±Ç°ÊÇ·ñ´¦ÓÚÈÈ¸üÐÂÖÐ£¬»òÕß²é¿´ÈÈ¸üÐÂ½ø¶ÈµÈ¡£
+
+module.hot.addStatusHandler()£º×¢²áÒ»¸ö×´Ì¬´¦ÀíÆ÷£¬ÓÃÓÚ¼àÌýÈÈ¸üÐÂµÄ×´Ì¬±ä»¯¡£¿ÉÒÔÓÃÀ´Ö´ÐÐ¶îÍâµÄÂß¼­£¬ÀýÈçÏÔÊ¾ÈÈ¸üÐÂ½ø¶ÈÌõ¡¢¼ÇÂ¼ÈÈ¸üÐÂÈÕÖ¾µÈ¡£
+
+ÕâÐ©API¿ÉÒÔ°ïÖú¿ª·¢ÕßÊµÏÖ¸ü¼ÓÁé»îºÍ¸ßÐ§µÄÈÈ¸üÐÂ¹¦ÄÜ£¬ÔÚWebpack´ò°üºóµÄÓ¦ÓÃ³ÌÐòÎÞÐèË¢ÐÂÒ³Ãæ¼´¿ÉÊµÏÖÄ£¿éµÄÈÈÌæ»»¡£
 
 4.webpack±àÒëÆ÷ÊÇÔõÃ´¼à²âµ½ÎÄ¼þ±ä»¯
 Webpack±àÒëÆ÷¼à²âÎÄ¼þ±ä»¯µÄ¹ý³ÌÖ÷Òª°üÀ¨ÒÔÏÂ¼¸¸ö²½Öè£º
