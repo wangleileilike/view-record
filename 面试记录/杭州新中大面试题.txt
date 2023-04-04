@@ -1,0 +1,32 @@
+1.如何解决项目中1px的问题?
+1.使用viewport单位
+可以使用viewport单位来解决1px显示问题，将1px转化为vw或vh单位。例如，border:1px solid #000; 可以改写为 border:0.01rem solid #000; 或 border:1px solid #000;。
+
+2.使用transform:scale()
+在需要1px的元素上使用transform:scale()，将元素缩小至原来的1/2，然后再放大2倍即可达到1px的效果。例如：
+
+.one-pixel-border {
+transform: scaleY(.5);
+border-bottom:1px solid #000;
+}
+3.使用伪类:before或:after
+可以使用伪类:before或:after来模拟一个1px的边框或线条，例如：
+
+.one-pixel-border {
+position: relative;
+}
+.one-pixel-border:before {
+content: "";
+position: absolute;
+top:0;
+left:0;
+width:100%;
+height:1px;
+background-color: #000;
+}
+4.使用box-shadow
+可以使用box-shadow来创建1px的阴影，例如：
+
+.one-pixel-border {
+box-shadow:01px00 #000 inset;
+}
